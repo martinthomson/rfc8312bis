@@ -996,7 +996,7 @@ differences between its original paper and {{?RFC8312}}.
   window decrease constant while {{?RFC8312}} changed it to CUBIC
   multiplication decrease factor. With this change, the current
   congestion window size after a loss event in {{?RFC8312}} was
-  *<!--{{{β}{}}}-->beta<sub>cubic</sub>* *W<sub>max</sub>* while it was
+  *<!--{{{β}{}}}-->beta<sub>cubic</sub>* * *W<sub>max</sub>* while it was
   (1-*<!--{{{β}{}}}-->beta<sub>cubic</sub>*) * *W<sub>max</sub>* in the
   original paper.
 
