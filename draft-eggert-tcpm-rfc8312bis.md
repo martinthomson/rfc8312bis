@@ -323,8 +323,8 @@ maximum segment size (MSS), and the unit of all times is seconds.
 
 ### Constants of interest
 
-*{{{β}{}}}<sub>cubic</sub>*:
-CUBIC multiplication decrease factor as described in {{mult-dec}}
+{{{β}{}}}*<sub>cubic</sub>*:
+CUBIC multiplication decrease factor as described in {{mult-dec}}.
 
 *C*:
 constant that determines the aggressiveness of CUBIC in competing
@@ -341,41 +341,41 @@ with other congestion control algorithms in high BDP networks. Please see
 
 Variables required to implement CUBIC are described in this section.
 
-RTT:
-Smoothed round-trip time in seconds calculated as described in {{!RFC6298}}
+*RTT*:
+Smoothed round-trip time in seconds calculated as described in {{!RFC6298}}.
 
 *cwnd*:
-Current congestion window in segments
+Current congestion window in segments.
 
 *ssthresh*:
-Current slow start threshold in segments
+Current slow start threshold in segments.
 
 *W<sub>max</sub>*:
 Size of *cwnd* in segments just before *cwnd* is reduced in the
-last congestion event
+last congestion event.
 
 *K*:
 The time period in seconds it takes to increase the current congestion
-window size to *W<sub>max</sub>*
+window size to *W<sub>max</sub>*.
 
 *current_time*:
-Current time of the system in seconds
+Current time of the system in seconds.
 
 *epoch_start*:
-The time in seconds at which the current congestion avoidance stage starts
+The time in seconds at which the current congestion avoidance stage starts.
 
-W<sub>cubic</sub>(t):
+W<sub>cubic</sub>(*t*):
 Target value of the congestion window in segments at time t in seconds
-based on the cubic increase function as described in {{win-inc}}
+based on the cubic increase function as described in {{win-inc}}.
 
 *target*:
-Target value of congestion window in segments after the next RTT,
-that is, W<sub>cubic</sub>(t + RTT) as described in {{win-inc}}
+Target value of congestion window in segments after the next *RTT*,
+that is, W<sub>cubic</sub>(*t* + *RTT*) as described in {{win-inc}}.
 
 *W<sub>est</sub>*:
 An estimate for the congestion window in segments in the TCP-friendly
 region, that is, an estimate for the congestion window using the AIMD
-approach similar to TCP-NewReno congestion controller
+approach similar to TCP-NewReno congestion controller.
 
 ## Window Increase Function {#win-inc}
 
@@ -391,7 +391,7 @@ function of Standard TCP.
 CUBIC uses the following window increase function:
 
 ~~~ math
-\mathrm{W_{cubic}}(t) = C * (t - K)^3 + W_{max}
+\mathrm{W_{cubic}}(*t*) = C * (t - K)^3 + W_{max}
 ~~~
 {: #eq1 artwork-align="center" }
 
@@ -422,8 +422,8 @@ mechanisms. In special cases, if *cwnd* is greater than
 *W<sub>max</sub>*, *K* is set to 0.
 
 Upon receiving an ACK during congestion avoidance, CUBIC computes the
-*target* congestion window size after the next RTT using {{eq1}} as
-follows, where RTT is the smoothed round-trip time. The lower and
+*target* congestion window size after the next *RTT* using {{eq1}} as
+follows, where *RTT* is the smoothed round-trip time. The lower and
 upper bounds below ensure that CUBIC's congestion window increase rate
 is non-decreasing and is less than the increase rate of slow start.
 
@@ -464,13 +464,13 @@ at least the same throughput as Standard TCP.
 The TCP-friendly region is designed according to the analysis
 described in {{FHP00}}. The analysis studies the performance of an
 Additive Increase and Multiplicative Decrease (AIMD) algorithm with an
-additive factor of *{{{α}{}}}<sub>aimd</sub>* (segments per RTT) and a
-multiplicative factor of *{{{β}{}}}<sub>aimd</sub>*, denoted by
-AIMD(*{{{α}{}}}<sub>aimd</sub>*, *{{{β}{}}}<sub>aimd</sub>*).
+additive factor of {{{α}{}}}*<sub>aimd</sub>* (segments per *RTT*) and a
+multiplicative factor of {{{β}{}}}*<sub>aimd</sub>*, denoted by
+AIMD({{{α}{}}}*<sub>aimd</sub>*, {{{β}{}}}*<sub>aimd</sub>*).
 Specifically, the average congestion window size of
-AIMD(*{{{α}{}}}<sub>aimd</sub>*, *{{{β}{}}}<sub>aimd</sub>*) can be
+AIMD({{{α}{}}}*<sub>aimd</sub>*, {{{β}{}}}*<sub>aimd</sub>*) can be
 calculated using {{eq3}}. The analysis shows that
-AIMD(*{{{α}{}}}<sub>aimd</sub>*, *{{{β}{}}}<sub>aimd</sub>*) with
+AIMD({{{α}{}}}*<sub>aimd</sub>*, {{{β}{}}}*<sub>aimd</sub>*) with
 
 ~~~ math
 α_{aimd} = 3 * \frac{1 - β_{cubic}}{1 + β_{cubic}}
@@ -487,8 +487,8 @@ AIMD(1, 0.5).
 {: #eq3 artwork-align="center" }
 
 Based on the above analysis, CUBIC uses {{eq4}} to estimate the window
-size *W<sub>est</sub>* of AIMD(*{{{α}{}}}<sub>aimd</sub>*,
-*{{{β}{}}}<sub>aimd</sub>*) with
+size *W<sub>est</sub>* of AIMD({{{α}{}}}*<sub>aimd</sub>*,
+{{{β}{}}}*<sub>aimd</sub>*) with
 
 ~~~ math
 \begin{array}{l}
@@ -501,7 +501,7 @@ size *W<sub>est</sub>* of AIMD(*{{{α}{}}}<sub>aimd</sub>*,
 which achieves the same average window size as Standard TCP. When
 receiving an ACK in congestion avoidance (*cwnd* could be greater than
 or less than *W<sub>max</sub>*), CUBIC checks whether
-W<sub>cubic</sub>(t) is less than *W<sub>est</sub>*. If so, CUBIC is
+W<sub>cubic</sub>(*t*) is less than *W<sub>est</sub>*. If so, CUBIC is
 in the TCP-friendly region and *cwnd* SHOULD be set to
 *W<sub>est</sub>* at each reception of an ACK.
 
@@ -515,7 +515,7 @@ W_{est} = W_{est} + α_{aimd} * \frac{segments\_acked}{cwnd}
 {: #eq4 artwork-align="center" }
 
 Note that once *W<sub>est</sub>* reaches *W<sub>max</sub>*, that is,
-*W<sub>est</sub>* >= *W<sub>max</sub>*, *{{{α}{}}}<sub>aimd</sub>*
+*W<sub>est</sub>* >= *W<sub>max</sub>*, {{{α}{}}}*<sub>aimd</sub>*
 SHOULD be set to 1 to achieve the same congestion window size as
 standard TCP that uses AIMD.
 
@@ -566,7 +566,7 @@ congestion is detected by receiving packets marked with ECN-Echo
 *ssthresh* immediately as below. For both packet loss and congestion
 detection through ECN, the sender MAY employ a fast recovery algorithm
 to gradually adjust the congestion window to its new reduced value.
-Parameter *{{{β}{}}}<sub>cubic</sub>* SHOULD be set to 0.7.
+Parameter {{{β}{}}}*<sub>cubic</sub>* SHOULD be set to 0.7.
 
 ~~~ math
 \begin{array}{ll}
@@ -580,11 +580,11 @@ cwnd = ssthresh &
 ~~~
 {: artwork-align="center" }
 
-A side effect of setting *{{{β}{}}}<sub>cubic</sub>* to a value bigger
+A side effect of setting {{{β}{}}}*<sub>cubic</sub>* to a value bigger
 than 0.5 is slower convergence. We believe that while a more adaptive
-setting of *{{{β}{}}}<sub>cubic</sub>* could result in faster
+setting of {{{β}{}}}*<sub>cubic</sub>* could result in faster
 convergence, it will make the analysis of CUBIC much harder. This
-adaptive adjustment of *{{{β}{}}}<sub>cubic</sub>* is an item for the
+adaptive adjustment of {{{β}{}}}*<sub>cubic</sub>* is an item for the
 next version of CUBIC.
 
 ## Fast Convergence
@@ -630,7 +630,7 @@ disabled.
 ## Timeout
 
 In case of timeout, CUBIC follows Standard TCP to reduce *cwnd*
-{{!RFC5681}}, but sets *ssthresh* using *{{{β}{}}}<sub>cubic</sub>*
+{{!RFC5681}}, but sets *ssthresh* using {{{β}{}}}*<sub>cubic</sub>*
 (same as in {{mult-dec}}) that is different from Standard TCP
 {{!RFC5681}}.
 
@@ -732,7 +732,7 @@ AVG\_W_{cubic} = \sqrt[4]{\frac{C * (3 + β_{cubic})}{4 * (1 - β_{cubic})}} * \
 ~~~
 {: #eq5 artwork-align="center" }
 
-With *{{{β}{}}}<sub>cubic</sub>* set to 0.7, the above formula is
+With {{{β}{}}}*<sub>cubic</sub>* set to 0.7, the above formula is
 reduced to:
 
 ~~~ math
@@ -775,7 +775,7 @@ TCP-friendly region for three different values of *C*.
 {: #tab1 title="Standard TCP, HSTCP, and CUBIC with RTT = 0.1 seconds"}
 
 {{tab1}} describes the response function of Standard TCP, HSTCP, and
-CUBIC in networks with RTT = 0.1 seconds. The average window size is
+CUBIC in networks with *RTT* = 0.1 seconds. The average window size is
 in MSS-sized segments.
 
 | Loss Rate P | TCP | HSTCP | CUBIC (C=0.04) | CUBIC (C=0.4) | CUBIC (C=4) |
@@ -790,12 +790,12 @@ in MSS-sized segments.
 {: #tab2 title="Standard TCP, HSTCP, and CUBIC with RTT = 0.01 seconds"}
 
 {{tab2}} describes the response function of Standard TCP, HSTCP, and
-CUBIC in networks with RTT = 0.01 seconds. The average window size is
+CUBIC in networks with *RTT* = 0.01 seconds. The average window size is
 in MSS-sized segments.
 
 Both tables show that CUBIC with any of these three *C* values is more
-friendly to TCP than HSTCP, especially in networks with a short RTT
-where TCP performs reasonably well. For example, in a network with RTT
+friendly to TCP than HSTCP, especially in networks with a short *RTT*
+where TCP performs reasonably well. For example, in a network with *RTT*
 = 0.01 seconds and p=10^-6, TCP has an average window of 1200 packets.
 If the packet size is 1500 bytes, then TCP can achieve an average rate
 of 1.44 Gbps. In this case, CUBIC with *C*=0.04 or *C*=0.4 achieves
@@ -807,7 +807,7 @@ competing with other congestion control algorithms for bandwidth.
 CUBIC is more friendly to Standard TCP, if the value of *C* is lower.
 However, we do not recommend setting *C* to a very low value like
 0.04, since CUBIC with a low *C* cannot efficiently use the bandwidth
-in long RTT and high-bandwidth networks. Based on these observations
+in long-*RTT* and high-bandwidth networks. Based on these observations
 and our experiments, we find *C*=0.4 gives a good balance between TCP-
 friendliness and aggressiveness of window increase. Therefore, *C*
 SHOULD be set to 0.4. With *C* set to 0.4, {{eq6}} is reduced to:
@@ -823,7 +823,7 @@ CUBIC.
 ## Using Spare Capacity
 
 CUBIC uses a more aggressive window increase function than Standard
-TCP under long RTT and high-bandwidth networks.
+TCP under long-*RTT* and high-bandwidth networks.
 
 The following table shows that to achieve the 10 Gbps rate, Standard
 TCP requires a packet loss rate of 2.0e-10, while CUBIC requires a
@@ -841,7 +841,7 @@ HSTCP, and CUBIC to achieve a certain throughput"}
 
 {{tab3}} describes the required packet loss rate for Standard TCP,
 HSTCP, and CUBIC to achieve a certain throughput. We use 1500-byte
-packets and an RTT of 0.1 seconds.
+packets and an *RTT* of 0.1 seconds.
 
 Our test results in {{HKLRX06}} indicate that CUBIC uses the spare
 bandwidth left unused by existing Standard TCP flows in the same
@@ -877,10 +877,10 @@ and Timeout behaviors of Standard TCP.
 
 ## Fairness within the Alternative Congestion Control Algorithm
 
-CUBIC ensures convergence of competing CUBIC flows with the same RTT
+CUBIC ensures convergence of competing CUBIC flows with the same *RTT*
 in the same bottleneck links to an equal throughput. When competing
-flows have different RTTs, their throughput ratio is linearly
-proportional to the inverse of their RTT ratios. This is true
+flows have different *RTT* values, their throughput ratio is linearly
+proportional to the inverse of their *RTT* ratios. This is true
 independent of the level of statistical multiplexing in the link.
 
 ## Performance with Misbehaving Nodes and Outside Attackers
@@ -893,7 +893,7 @@ CUBIC does not raise its congestion window size if the flow is
 currently limited by the application instead of the congestion window.
 In case of long periods when *cwnd* has not been updated due to the
 application rate limit, such as idle periods, t in {{eq1}} MUST NOT
-include these periods; otherwise, W<sub>cubic</sub>(t) might be very
+include these periods; otherwise, W<sub>cubic</sub>(*t*) might be very
 high after restarting from these periods.
 
 ## Responses to Sudden or Transient Events
@@ -951,7 +951,7 @@ Richard Scheffenegger and Alexander Zimmermann originally co-authored
 - update *W<sub>est</sub>* to use AIMD approach
   ([#20](https://github.com/NTAP/rfc8312bis/issues/20))
 
-- set <!--{{{α}{}}}-->alpha<sub>aimd</sub> to 1 once *W<sub>est</sub>*
+- set <!--{{{α}{}}}-->alpha*<sub>aimd</sub>* to 1 once *W<sub>est</sub>*
   reaches *W<sub>max</sub>*
   ([#2](https://github.com/NTAP/rfc8312bis/issues/2))
 
@@ -990,14 +990,14 @@ differences between its original paper and {{?RFC8312}}.
 - {{HRX08}} also includes experimental results showing its performance
   {{and fairness.
 
-- The definition of *<!--{{{β}{}}}-->beta<sub>cubic</sub>* constant
+- The definition of <!--{{{β}{}}}-->beta*<sub>cubic</sub>* constant
   was changed in {{?RFC8312}}. For example,
-  *<!--{{{β}{}}}-->beta<sub>cubic</sub>* in the original paper was the
+  <!--{{{β}{}}}-->beta*<sub>cubic</sub>* in the original paper was the
   window decrease constant while {{?RFC8312}} changed it to CUBIC
   multiplication decrease factor. With this change, the current
   congestion window size after a loss event in {{?RFC8312}} was
-  *<!--{{{β}{}}}-->beta<sub>cubic</sub>* \* *W<sub>max</sub>* while it was
-  (1-*<!--{{{β}{}}}-->beta<sub>cubic</sub>*) \* *W<sub>max</sub>* in the
+  <!--{{{β}{}}}-->beta*<sub>cubic</sub>* \* *W<sub>max</sub>* while it was
+  (1-<!--{{{β}{}}}-->beta*<sub>cubic</sub>*) \* *W<sub>max</sub>* in the
   original paper.
 
 - Its pseudocode used *W<sub>last_max</sub>* while {{?RFC8312}} used
