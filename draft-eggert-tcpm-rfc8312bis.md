@@ -391,7 +391,7 @@ function of Standard TCP.
 CUBIC uses the following window increase function:
 
 ~~~ math
-\mathrm{W_{cubic}}(*t*) = C * (t - K)^3 + W_{max}
+\mathrm{W_{cubic}}(t) = C * (t - K)^3 + W_{max}
 ~~~
 {: #eq1 artwork-align="center" }
 
