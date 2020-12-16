@@ -114,6 +114,19 @@ informative:
     - name: Khaled Harfoush
     - name: Injong Rhee
 
+  SXEZ19:
+    title:
+      Model-Agnostic and Efficient Exploration of Numerical State Space of
+      Real-World TCP Congestion Control Implementations
+    date: 2019
+    seriesinfo:
+      USENIX NSDI: 2019
+    author:
+    - name: Wei Sun
+    - name: Lisong Xu
+    - name: Sebastian Elbaum
+    - name: Di Zhao
+
   CEHRX07:  DOI.10.1109/INFCOM.2007.111
   HRX08:    DOI.10.1145/1400097.1400105
   K03:      DOI.10.1145/956981.956989
@@ -149,7 +162,7 @@ draft can be found at [](https://github.com/NTAP/rfc8312bis).
 # Introduction
 
 The low utilization problem of TCP in fast long-distance networks is
-well documented in {{?K03}} and {{?RFC3649}}. This problem arises from a
+well documented in {{K03}} and {{?RFC3649}}. This problem arises from a
 slow increase of the congestion window following a congestion event
 in a network with a large bandwidth-delay product (BDP). {{HKLRX06}}
 indicates that this problem is frequently observed even in the range
@@ -160,7 +173,7 @@ their variants, including TCP-Reno {{!RFC5681}}, TCP-NewReno
 use the same linear increase function for window growth, which we refer to
 collectively as "Standard TCP" below.
 
-CUBIC, originally proposed in {{?HRX08}}, is a modification to the
+CUBIC, originally proposed in {{HRX08}}, is a modification to the
 congestion control algorithm of Standard TCP to remedy this problem.
 This document describes the most recent specification of CUBIC.
 Specifically, CUBIC uses a cubic function instead of a linear window
@@ -214,7 +227,7 @@ decrease factor in order to balance between the scalability and
 convergence speed.
 
 Principle 1: For better network utilization and stability, CUBIC
-{{?HRX08}} uses a cubic window increase function in terms of the elapsed
+{{HRX08}} uses a cubic window increase function in terms of the elapsed
 time from the last congestion event. While most alternative
 congestion control algorithms to Standard TCP increase the congestion
 window using convex functions, CUBIC uses both the concave and convex
@@ -230,7 +243,7 @@ the cubic function. The cubic function is set to have its plateau at
 size becomes *W<sub>max</sub>*. After that, the cubic function turns into a
 convex profile and the convex window increase begins. This style of
 window adjustment (concave and then convex) improves the algorithm
-stability while maintaining high network utilization {{?CEHRX07}}. This
+stability while maintaining high network utilization {{CEHRX07}}. This
 is because the window size remains almost constant, forming a plateau
 around *W<sub>max</sub>* where network utilization is deemed highest. Under
 steady state, most window size samples of CUBIC are close to *W<sub>max</sub>*,
@@ -920,7 +933,7 @@ Richard Scheffenegger and Alexander Zimmermann originally co-authored
 - add list of variables and constants
   ([#5](https://github.com/NTAP/rfc8312bis/issues/5),
   [#6](https://github.com/NTAP/rfc8312bis/issues/5))
-- update *K*'s definition and add bounds for CUBIC *target* *cwnd*
+- update *K*'s definition and add bounds for CUBIC *target* *cwnd* {{SXEZ19}}
   ([#1](https://github.com/NTAP/rfc8312bis/issues/1),
   [#14](https://github.com/NTAP/rfc8312bis/issues/14))
 - update *W<sub>est</sub>* to use AIMD approach
@@ -943,3 +956,22 @@ Richard Scheffenegger and Alexander Zimmermann originally co-authored
 - updated author information
 - various whitespace changes
 - move to Standards Track
+
+# Changes from the Original Paper
+
+CUBIC has gone through a few changes since the initial release {{HRX08}}
+of its algorithm and implementation. Below we highlight the differences
+between its original paper and {{?RFC8312}}.
+
+- The original paper {{HRX08}} included the pseudocode of CUBIC implementation
+using Linux's pluggable congestion control framework, which excludes system-specific
+optimizations. The simplified pseudocode might be a good source to start with
+and understand CUBIC.
+- It also includes experimental results showing its performance and fairness.
+- The definition of beta_cubic constant was changed in {{?RFC8312}}.
+For example, beta_cubic in the original paper was the window decrease constant
+while {{?RFC8312}} changed it to CUBIC multiplication decrease factor.
+With this change, the current congestion window size after a loss event in {{?RFC8312}}
+was beta_cubic * W_max while it was (1-beta_cubic) * W_max in the original paper.
+- Its pseudocode used W_last_max while {{?RFC8312}} used W_max.
+- Its TCP friendly window was W_tcp while {{?RFC8312}} used W_est.
