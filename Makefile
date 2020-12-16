@@ -36,6 +36,8 @@ asciitex:
 endif
 
 versions:
+	-gem update kramdown-rfc2629
+	-pip3 install -U xml2rfc
 	-kramdown-rfc2629 -V
 	-xml2rfc -V
 	-npm -v
