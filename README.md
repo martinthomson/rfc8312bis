@@ -13,11 +13,11 @@ The easiest way to build formatted text and HTML versions of this draft is to us
 
 ```sh
 docker run \
-        --pull always \
-        -v $(pwd):/id:delegated \
-        --cap-add=SYS_ADMIN \
-        docker.pkg.github.com/larseggert/i-d-toolchain/i-d-toolchain:latest \
-        kdrfc -h -3 /id/draft-eggert-tcpm-rfc8312bis.md
+       --pull always \
+       -v $(pwd):/id:delegated \
+       --cap-add=SYS_ADMIN \
+       docker.pkg.github.com/larseggert/i-d-toolchain/i-d-toolchain:latest \
+       kdrfc -h -3 /id/draft-eggert-tcpm-rfc8312bis.md
 ```
 Alternatively, formatted text and HTML versions of the draft can be built using `make`.
 
