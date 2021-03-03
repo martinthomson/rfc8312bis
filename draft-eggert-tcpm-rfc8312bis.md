@@ -366,6 +366,10 @@ maximum segment size (MSS), and the unit of all times is seconds.
 {{{β}{}}}*<sub>cubic</sub>*:
 CUBIC multiplication decrease factor as described in {{mult-dec}}.
 
+{{{α}{}}}*<sub>aimd</sub>*:
+CUBIC additive increase factor used in AIMD-friendly region
+as described in {{aimd-friendly}}.
+
 *C*:
 constant that determines the aggressiveness of CUBIC in competing
 with other congestion control algorithms in high BDP networks. Please see
@@ -422,6 +426,9 @@ that is, W<sub>cubic</sub>(*t* + *RTT*), as described in {{win-inc}}.
 *W<sub>est</sub>*:
 An estimate for the congestion window in segments in the AIMD-friendly
 region, that is, an estimate for the congestion window of AIMD TCP.
+
+*segments_acked*:
+Number of segments acked when an ACK is received.
 
 ## Window Increase Function {#win-inc}
 
@@ -503,7 +510,7 @@ CUBIC runs in three different regions:
 
 Below, we describe the exact actions taken by CUBIC in each region.
 
-## AIMD-Friendly Region
+## AIMD-Friendly Region {#aimd-friendly}
 
 AIMD TCP performs well in certain types of networks, for example,
 under short RTTs and small bandwidths (or small BDPs). In these
@@ -553,7 +560,7 @@ W<sub>cubic</sub>(*t*) is less than *W<sub>est</sub>*. If so, CUBIC is
 in the AIMD-friendly region and *cwnd* SHOULD be set to
 *W<sub>est</sub>* at each reception of an ACK.
 
-*W<sub>est</sub>* is set equal to *cwnd* at the start of the
+*W<sub>est</sub>* is set equal to *cwnd<sub>start</sub>* at the start of the
 congestion avoidance stage. After that, on every ACK,
 *W<sub>est</sub>* is updated using {{eq4}}.
 
