@@ -658,8 +658,9 @@ in {{mult-dec}}.
 ~~~ math
 W_{max} = \left\{
 \begin{array}{ll}
-W_{max} * \frac{1 + β_{cubic}}{2}
-& \text{if } cwnd < W_{max}, \text{further reduce } W_{max} \\
+cwnd * \frac{1 + β_{cubic}}{2}
+& \text{if } cwnd < W_{max} \text{ and fast convergence is enabled},\\
+& \text{further reduce } W_{max} \\
 cwnd
 &\text{otherwise, remember cwnd before reduction} \\
 \end{array} \right.
@@ -990,6 +991,9 @@ Richard Scheffenegger and Alexander Zimmermann originally co-authored
 - add definition for segments_acked and <!--{{{α}{}}}-->alpha*<sub>aimd</sub>*.
 ([#47](https://github.com/NTAP/rfc8312bis/issues/47))
 
+- fix a mistake in *W<sub>max</sub>* calculation in the fast convergence section.
+  ([#51](https://github.com/NTAP/rfc8312bis/issues/51))
+  
 ## Since draft-eggert-tcpm-rfc8312bis-01
 
 - Rename TCP-Friendly to AIMD-Friendly and rename Standard TCP to AIMD
