@@ -470,12 +470,9 @@ K = \sqrt[3]{\frac{W_{max} - cwnd_{start}}{C}}
 {: #eq2 artwork-align="center" }
 
 where *cwnd<sub>start</sub>* is the congestion window at the beginning
-of the current congestion avoidance stage. *cwnd<sub>start</sub>* is
-calculated as described in {{mult-dec}} when a congestion event is
-detected, although implementations can further adjust
-*cwnd<sub>start</sub>* based on other Fast Recovery mechanisms. In
-special cases, if *cwnd<sub>start</sub>* is greater than
-*W<sub>max</sub>*, *K* is set to 0.
+of the current congestion avoidance stage. For example, right after a
+congestion event, *cwnd<sub>start</sub>* is equal to the new cwnd
+calculated as described in {{mult-dec}}.
 
 Upon receiving an ACK during congestion avoidance, CUBIC computes the
 *target* congestion window size after the next *RTT* using {{eq1}} as
@@ -619,10 +616,12 @@ for each received ACK, where *target* is calculated as described in
 
 When a packet loss is detected by duplicate ACKs or by receiving
 packets carrying ECE flags, CUBIC updates *W<sub>max</sub>* and
-reduces *cwnd* and *ssthresh* immediately as described below. For both
-packet loss and congestion detection through ECN, the sender MAY
+reduces *cwnd* and *ssthresh* immediately as described below. An
+implementation MAY set a smaller *ssthresh* than suggested below to
+accomodate rate-limited applications as described in {{?RFC7661}}.
+For both packet loss and congestion detection through ECN, the sender MAY
 employ a Fast Recovery algorithm to gradually adjust the congestion
-window to its new reduced value. The parameter {{{β}{}}}*<sub>cubic</sub>*
+window to its new reduced *ssthresh* value. The parameter {{{β}{}}}*<sub>cubic</sub>*
 SHOULD be set to 0.7.
 
 ~~~ math
@@ -989,22 +988,26 @@ Richard Scheffenegger and Alexander Zimmermann originally co-authored
 ## Since draft-eggert-tcpm-rfc8312bis-02
 
 - add definition for segments_acked and <!--{{{α}{}}}-->alpha*<sub>aimd</sub>*.
-([#47](https://github.com/NTAP/rfc8312bis/issues/47))
+  ([#47](https://github.com/NTAP/rfc8312bis/issues/47))
 
 - fix a mistake in *W<sub>max</sub>* calculation in the fast convergence section.
   ([#51](https://github.com/NTAP/rfc8312bis/issues/51))
   
+- clarity on setting *ssthresh* and *cwnd<sub>start</sub>* during
+  multiplicative decrease.
+  ([#53](https://github.com/NTAP/rfc8312bis/issues/53))
+
 ## Since draft-eggert-tcpm-rfc8312bis-01
 
-- Rename TCP-Friendly to AIMD-Friendly and rename Standard TCP to AIMD
+- rename TCP-Friendly to AIMD-Friendly and rename Standard TCP to AIMD
   TCP to avoid confusion as CUBIC has been widely used in the Internet.
   ([#38](https://github.com/NTAP/rfc8312bis/issues/38))
 
-- Change introductory text to reflect the significant broader
+- change introductory text to reflect the significant broader
   deployment of CUBIC in the Internet.
   ([#39](https://github.com/NTAP/rfc8312bis/issues/39))
 
-- Rephrase introduction to avoid referring to variables that have not
+- rephrase introduction to avoid referring to variables that have not
   been defined yet.
 
 ## Since draft-eggert-tcpm-rfc8312bis-00
@@ -1017,7 +1020,7 @@ Richard Scheffenegger and Alexander Zimmermann originally co-authored
 
 - add list of variables and constants
   ([#5](https://github.com/NTAP/rfc8312bis/issues/5),
-  [#6](https://github.com/NTAP/rfc8312bis/issues/5))
+  [#6](https://github.com/NTAP/rfc8312bis/issues/6))
 
 - update *K*'s definition and add bounds for CUBIC *target* *cwnd*
   {{SXEZ19}} ([#1](https://github.com/NTAP/rfc8312bis/issues/1),
@@ -1035,7 +1038,7 @@ Richard Scheffenegger and Alexander Zimmermann originally co-authored
   ([#17](https://github.com/NTAP/rfc8312bis/issues/17))
 
 - note for Fast Recovery during *cwnd* decrease due to congestion
-  event ([#11](https://github.com/NTAP/rfc8312bis11/issues/11))
+  event ([#11](https://github.com/NTAP/rfc8312bis/issues/11))
 
 - add section for spurious congestion events
   ([#23](https://github.com/NTAP/rfc8312bis/issues/23))
