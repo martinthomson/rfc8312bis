@@ -203,12 +203,13 @@ designed to be less aggressive and fairer to AIMD TCP in bandwidth
 usage than BIC-TCP while maintaining the strengths of BIC-TCP such as
 stability, window scalability, and round-trip time (RTT) fairness.
 CUBIC has been adopted as the default TCP congestion control algorithm
-in the Linux, Windows, and Apple stacks, and has been used and deployed
-globally. Extensive, decade-long deployment experience in vastly
-different Internet scenarios has convincingly demonstrated that CUBIC
-is safe for deployment on the global Internet and delivers substantial
-benefits over traditional AIMD congestion control. It is therefore to
-be regarded as the current standard for TCP congestion control.
+in the Linux, Windows, and Apple stacks, and has been used and
+deployed globally. Extensive, decade-long deployment experience in
+vastly different Internet scenarios has convincingly demonstrated that
+CUBIC is safe for deployment on the global Internet and delivers
+substantial benefits over traditional AIMD congestion control. It is
+therefore to be regarded as the current standard for TCP congestion
+control.
 
 In the following sections, we first briefly explain the design
 principles of CUBIC, then provide the exact specification of CUBIC,
@@ -371,10 +372,10 @@ CUBIC additive increase factor used in AIMD-friendly region
 as described in {{aimd-friendly}}.
 
 *C*:
-constant that determines the aggressiveness of CUBIC in competing
-with other congestion control algorithms in high BDP networks. Please see
-{{discussion}} for more explanation on how it is set. The unit for
-*C* is
+constant that determines the aggressiveness of CUBIC in competing with
+other congestion control algorithms in high BDP networks. Please see
+{{discussion}} for more explanation on how it is set. The unit for *C*
+is
 
 ~~~ math
 \frac{segment}{second^3}
@@ -557,8 +558,8 @@ W<sub>cubic</sub>(*t*) is less than *W<sub>est</sub>*. If so, CUBIC is
 in the AIMD-friendly region and *cwnd* SHOULD be set to
 *W<sub>est</sub>* at each reception of an ACK.
 
-*W<sub>est</sub>* is set equal to *cwnd<sub>start</sub>* at the start of the
-congestion avoidance stage. After that, on every ACK,
+*W<sub>est</sub>* is set equal to *cwnd<sub>start</sub>* at the start
+of the congestion avoidance stage. After that, on every ACK,
 *W<sub>est</sub>* is updated using {{eq4}}.
 
 ~~~ math
@@ -618,11 +619,11 @@ When a packet loss is detected by duplicate ACKs or by receiving
 packets carrying ECE flags, CUBIC updates *W<sub>max</sub>* and
 reduces *cwnd* and *ssthresh* immediately as described below. An
 implementation MAY set a smaller *ssthresh* than suggested below to
-accomodate rate-limited applications as described in {{?RFC7661}}.
-For both packet loss and congestion detection through ECN, the sender MAY
-employ a Fast Recovery algorithm to gradually adjust the congestion
-window to its new reduced *ssthresh* value. The parameter {{{β}{}}}*<sub>cubic</sub>*
-SHOULD be set to 0.7.
+accommodate rate-limited applications as described in {{?RFC7661}}.
+For both packet loss and congestion detection through ECN, the sender
+MAY employ a Fast Recovery algorithm to gradually adjust the
+congestion window to its new reduced *ssthresh* value. The parameter
+{{{β}{}}}*<sub>cubic</sub>* SHOULD be set to 0.7.
 
 ~~~ math
 \begin{array}{ll}
@@ -644,11 +645,11 @@ convergence, it will make the analysis of CUBIC much harder.
 ## Fast Convergence
 
 To improve convergence speed, CUBIC uses a heuristic. When a new flow
-joins the network, existing flows need to give up some
-of their bandwidth to allow the new flow some room for growth, if the
-existing flows have been using all the network bandwidth. To
-speed up this bandwidth release by existing flows, the following "Fast
-Convergence" mechanism SHOULD be implemented.
+joins the network, existing flows need to give up some of their
+bandwidth to allow the new flow some room for growth, if the existing
+flows have been using all the network bandwidth. To speed up this
+bandwidth release by existing flows, the following "Fast Convergence"
+mechanism SHOULD be implemented.
 
 With Fast Convergence, when a congestion event occurs, we update
 *W<sub>max</sub>* as follows, before the window reduction as described
@@ -707,9 +708,9 @@ of packet reordering could cause multiple congestion window reduction
 events, where spurious losses are incorrectly interpreted as
 congestion signals, thus degrading CUBIC's performance significantly.
 
-When there is a congestion event, a CUBIC implementation SHOULD save the
-current value of the following variables before the congestion window
-reduction.
+When there is a congestion event, a CUBIC implementation SHOULD save
+the current value of the following variables before the congestion
+window reduction.
 
 ~~~ math
 \begin{array}{l}
@@ -798,9 +799,8 @@ We will determine the value of *C* in the following subsection using
 
 ## Fairness to AIMD TCP
 
-In environments where AIMD TCP is able to make reasonable use of
-the available bandwidth, CUBIC does not significantly change this
-state.
+In environments where AIMD TCP is able to make reasonable use of the
+available bandwidth, CUBIC does not significantly change this state.
 
 AIMD TCP performs well in the following two types of networks:
 
@@ -826,9 +826,9 @@ region for three different values of *C*.
 | 1.0e-08 | 12000 | 574356 | 105383 | 187400 | 333250 |
 {: #tab1 title="AIMD TCP, HSTCP, and CUBIC with RTT = 0.1 seconds"}
 
-{{tab1}} describes the response function of AIMD TCP, HSTCP, and
-CUBIC in networks with *RTT* = 0.1 seconds. The average window size is
-in MSS-sized segments.
+{{tab1}} describes the response function of AIMD TCP, HSTCP, and CUBIC
+in networks with *RTT* = 0.1 seconds. The average window size is in
+MSS-sized segments.
 
 | Loss Rate P | AIMD | HSTCP | CUBIC (C=0.04) | CUBIC (C=0.4) | CUBIC (C=4) |
 | ---:| ---:| ---:| ---:| ---:| ---:|
@@ -841,9 +841,9 @@ in MSS-sized segments.
 | 1.0e-08 | 12000 | 574356 | 18740 | 33325 | 59261 |
 {: #tab2 title="AIMD TCP, HSTCP, and CUBIC with RTT = 0.01 seconds"}
 
-{{tab2}} describes the response function of AIMD TCP, HSTCP, and
-CUBIC in networks with *RTT* = 0.01 seconds. The average window size is
-in MSS-sized segments.
+{{tab2}} describes the response function of AIMD TCP, HSTCP, and CUBIC
+in networks with *RTT* = 0.01 seconds. The average window size is in
+MSS-sized segments.
 
 Both tables show that CUBIC with any of these three *C* values is more
 friendly to AIMD TCP than HSTCP, especially in networks with a short
@@ -985,6 +985,10 @@ Richard Scheffenegger and Alexander Zimmermann originally co-authored
 <!-- For future PRs, please include a bullet below that summarizes the change
      and link the issue number to the GitHub issue page. -->
 
+## Since draft-eggert-tcpm-rfc8312bis-03
+
+- fix spelling nits
+
 ## Since draft-eggert-tcpm-rfc8312bis-02
 
 - add definition for segments_acked and <!--{{{α}{}}}-->alpha*<sub>aimd</sub>*.
@@ -992,7 +996,7 @@ Richard Scheffenegger and Alexander Zimmermann originally co-authored
 
 - fix a mistake in *W<sub>max</sub>* calculation in the fast convergence section.
   ([#51](https://github.com/NTAP/rfc8312bis/issues/51))
-  
+
 - clarity on setting *ssthresh* and *cwnd<sub>start</sub>* during
   multiplicative decrease.
   ([#53](https://github.com/NTAP/rfc8312bis/issues/53))
