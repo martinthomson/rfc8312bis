@@ -2,7 +2,7 @@
 
 title: CUBIC for Fast and Long-Distance Networks
 abbrev: CUBIC
-docname: draft-eggert-tcpm-rfc8312bis-latest
+docname: draft-ietf-tcpm-rfc8312bis-latest
 date: {DATE}
 category: std
 ipr: trust200902
@@ -988,6 +988,7 @@ Richard Scheffenegger and Alexander Zimmermann originally co-authored
 ## Since draft-eggert-tcpm-rfc8312bis-03
 
 - fix spelling nits
+- rename to draft-ietf
 
 ## Since draft-eggert-tcpm-rfc8312bis-02
 
