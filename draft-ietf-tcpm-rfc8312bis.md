@@ -1088,5 +1088,5 @@ differences between its original paper and {{?RFC8312}}.
 - Its pseudocode used *W<sub>last_max</sub>* while {{?RFC8312}} used
   *W<sub>max</sub>*.
 
-- Its AIMD-friendly window was W<sub>tcp</sub> while {{?RFC8312}} used
+- Its AIMD-friendly window was *W<sub>tcp</sub>* while {{?RFC8312}} used
   *W<sub>est</sub>*.
