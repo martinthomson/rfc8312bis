@@ -168,6 +168,16 @@ Working Group information can be found at
 [](https://datatracker.ietf.org/wg/tcpm/); source code and issues list
 for this draft can be found at [](https://github.com/NTAP/rfc8312bis).
 
+--- note_Note_to_the_RFC_Editor
+
+xml2rfc currently renders `<em></em>` in the XML by surrounding the
+corresponding text with underscores. This is highly distracting;
+please manually remove the underscores when doing the final edits to
+the text version of this document.
+
+(There is an issue open against xml2rfc to stop doing this in the
+future: https://trac.tools.ietf.org/tools/xml2rfc/trac/ticket/596)
+
 --- middle
 
 # Introduction
