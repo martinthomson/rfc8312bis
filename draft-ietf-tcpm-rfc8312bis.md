@@ -191,7 +191,8 @@ vastly different Internet scenarios has convincingly demonstrated that
 CUBIC is safe for deployment on the global Internet and delivers
 substantial benefits over traditional AIMD congestion control. It is
 therefore to be regarded as the current standard for TCP congestion
-control.
+control. CUBIC can also be used for other transport protocols such as
+QUIC {{?RFC9000}} and SCTP {{?RFC4960}} as a default congestion controller.
 
 The design of CUBIC was motivated by the well-documented problem
 traditional TCP has with  low utilization over fast and long-distance
@@ -1000,6 +1001,11 @@ Richard Scheffenegger and Alexander Zimmermann originally co-authored
 
 <!-- For future PRs, please include a bullet below that summarizes the change
      and link the issue number to the GitHub issue page. -->
+
+## Since draft-ietf-tcpm-rfc8312bis-02
+
+- add applicability to QUIC and SCTP.
+([61](https://github.com/NTAP/rfc8312bis/issues/61))
 
 ## Since draft-ietf-tcpm-rfc8312bis-01
 
