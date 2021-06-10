@@ -585,9 +585,11 @@ W_{est} = W_{est} + α_{aimd} * \frac{segments\_acked}{cwnd}
 {: #eq4 artwork-align="center" }
 
 Note that once *W<sub>est</sub>* reaches *W<sub>max</sub>*, that is,
-*W<sub>est</sub>* >= *W<sub>max</sub>*, {{{α}{}}}*<sub>aimd</sub>*
-SHOULD be set to 1 to achieve the same congestion window increment as
-AIMD TCP, which uses AIMD(1, 0.5).
+*W<sub>est</sub>* >= *W<sub>max</sub>*, CUBIC needs to start probing to
+determine the new value of *W<sub>max</sub>*. At this point,
+{{{α}{}}}*<sub>aimd</sub>* SHOULD be set to 1 to ensure that
+CUBIC can achieve the same congestion window increment as AIMD
+TCP, which uses AIMD(1, 0.5).
 
 ## Concave Region
 
@@ -1006,6 +1008,9 @@ Richard Scheffenegger and Alexander Zimmermann originally co-authored
 
 - add applicability to QUIC and SCTP.
 ([61](https://github.com/NTAP/rfc8312bis/issues/61))
+
+- clarity on setting <!--{{{α}{}}}-->alpha*<sub>aimd</sub>* to 1
+([68](https://github.com/NTAP/rfc8312bis/issues/68))
 
 ## Since draft-ietf-tcpm-rfc8312bis-01
 
