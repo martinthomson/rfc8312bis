@@ -382,7 +382,7 @@ maximum segment size (MSS), and the unit of all times is seconds.
 {{{β}{}}}*<sub>cubic</sub>*:
 CUBIC multiplication decrease factor as described in {{mult-dec}}.
 
-{{{α}{}}}*<sub>aimd</sub>*:
+{{{α}{}}}*<sub>cubic</sub>*:
 CUBIC additive increase factor used in AIMD-friendly region
 as described in {{aimd-friendly}}.
 
@@ -534,37 +534,32 @@ least the same throughput as AIMD TCP.
 
 The AIMD-friendly region is designed according to the analysis in
 {{FHP00}}, which studies the performance of an AIMD algorithm with an
-additive factor of {{{α}{}}}*<sub>aimd</sub>* (segments per *RTT*) and
-a multiplicative factor of {{{β}{}}}*<sub>aimd</sub>*, denoted by
-AIMD({{{α}{}}}*<sub>aimd</sub>*, {{{β}{}}}*<sub>aimd</sub>*).
+additive factor of {{{α}{}}} (segments per *RTT*) and
+a multiplicative factor of {{{β}{}}}, denoted by
+AIMD({{{α}{}}}, {{{β}{}}}).
 Specifically, the average congestion window size of
-AIMD({{{α}{}}}*<sub>aimd</sub>*, {{{β}{}}}*<sub>aimd</sub>*) can be
-calculated using {{eq3}}. The analysis shows that
-AIMD({{{α}{}}}*<sub>aimd</sub>*, {{{β}{}}}*<sub>aimd</sub>*) with
+AIMD({{{α}{}}}, {{{β}{}}}) can be
+calculated using {{eq3}}.
 
 ~~~ math
-α_{aimd} = 3 * \frac{1 - β_{cubic}}{1 + β_{cubic}}
-~~~
-{: artwork-align="center" }
-
-achieves the same average window size as AIMD TCP that uses
-AIMD(1, 0.5).
-
-~~~ math
-\mathrm{AVG\_AIMD}(α_{aimd}, β_{aimd}) =
-    \sqrt{\frac{α_{aimd} * (1 + β_{aimd})}{2 * (1 - β_{aimd}) * p}}
+\mathrm{AVG\_AIMD}(α, β) =
+    \sqrt{\frac{α * (1 + β)}{2 * (1 - β) * p}}
 ~~~
 {: #eq3 artwork-align="center" }
 
-Based on the above analysis, CUBIC uses {{eq4}} to estimate the window
-size *W<sub>est</sub>* of AIMD({{{α}{}}}*<sub>aimd</sub>*,
-{{{β}{}}}*<sub>aimd</sub>*) with
+By the same analysis, to achieve the same average window size as AIMD TCP
+that uses AIMD(1, 0.5), {{{α}{}}} must be equal to,
 
 ~~~ math
-\begin{array}{l}
-α_{aimd} = 3 * \frac{1 - β_{cubic}}{1 + β_{cubic}} \\
-β_{aimd} = β_{cubic} \\
-\end{array}
+3 * \frac{1 - β}{1 + β}
+~~~
+{: artwork-align="center" }
+
+Thus, CUBIC uses {{eq4}} to estimate the window
+size *W<sub>est</sub>* in the AIMD-friendly region with
+
+~~~ math
+α_{cubic} = 3 * \frac{1 - β_{cubic}}{1 + β_{cubic}} \\
 ~~~
 {: artwork-align="center" }
 
@@ -580,14 +575,14 @@ of the congestion avoidance stage. After that, on every ACK,
 *W<sub>est</sub>* is updated using {{eq4}}.
 
 ~~~ math
-W_{est} = W_{est} + α_{aimd} * \frac{segments\_acked}{cwnd}
+W_{est} = W_{est} + α_{cubic} * \frac{segments\_acked}{cwnd}
 ~~~
 {: #eq4 artwork-align="center" }
 
 Note that once *W<sub>est</sub>* reaches *W<sub>max</sub>*, that is,
 *W<sub>est</sub>* >= *W<sub>max</sub>*, CUBIC needs to start probing to
 determine the new value of *W<sub>max</sub>*. At this point,
-{{{α}{}}}*<sub>aimd</sub>* SHOULD be set to 1 to ensure that
+{{{α}{}}}*<sub>cubic</sub>* SHOULD be set to 1 to ensure that
 CUBIC can achieve the same congestion window increment as AIMD
 TCP, which uses AIMD(1, 0.5).
 
@@ -1007,10 +1002,13 @@ Richard Scheffenegger and Alexander Zimmermann originally co-authored
 ## Since draft-ietf-tcpm-rfc8312bis-02
 
 - add applicability to QUIC and SCTP.
-([61](https://github.com/NTAP/rfc8312bis/issues/61))
+  ([61](https://github.com/NTAP/rfc8312bis/issues/61))
 
 - clarity on setting <!--{{{α}{}}}-->alpha*<sub>aimd</sub>* to 1
-([68](https://github.com/NTAP/rfc8312bis/issues/68))
+  ([68](https://github.com/NTAP/rfc8312bis/issues/68))
+
+- introduce <!--{{{α}{}}}-->alpha*<sub>cubic</sub>*
+  ([64](https://github.com/NTAP/rfc8312bis/issues/64))
 
 ## Since draft-ietf-tcpm-rfc8312bis-01
 
