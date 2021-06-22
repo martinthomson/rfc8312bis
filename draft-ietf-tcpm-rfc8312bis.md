@@ -613,11 +613,13 @@ available bandwidth after some flow departures. Since the Internet is
 highly asynchronous, some amount of perturbation is always possible
 without causing a major change in available bandwidth.
 
-In this region, CUBIC is very careful. The convex profile ensures that
-the window increases very slowly at the beginning and gradually
-increases its increase rate. We also call this region the "maximum
-probing phase", since CUBIC is searching for a new *W<sub>max</sub>*.
-In this region, *cwnd* MUST be incremented by
+Unless it is overridden by the AIMD window increase, CUBIC is very
+careful in this region. The convex profile aims to
+increase the window very slowly at the beginning when *cwnd* is
+around *W<sub>max</sub>* and then gradually increases its rate of increase.
+We also call this region the "maximum probing phase", since CUBIC is
+searching for a new *W<sub>max</sub>*. In this region, *cwnd* MUST be
+incremented by
 
 ~~~ math
 \frac{target - cwnd}{cwnd}
@@ -1001,7 +1003,7 @@ Richard Scheffenegger and Alexander Zimmermann originally co-authored
 
 ## Since draft-ietf-tcpm-rfc8312bis-02
 
-- add applicability to QUIC and SCTP.
+- add applicability to QUIC and SCTP
   ([61](https://github.com/NTAP/rfc8312bis/issues/61))
 
 - clarity on setting <!--{{{α}{}}}-->alpha*<sub>aimd</sub>* to 1
@@ -1009,6 +1011,9 @@ Richard Scheffenegger and Alexander Zimmermann originally co-authored
 
 - introduce <!--{{{α}{}}}-->alpha*<sub>cubic</sub>*
   ([64](https://github.com/NTAP/rfc8312bis/issues/64))
+
+- clarify *cwnd* growth in convex region
+  ([69](https://github.com/NTAP/rfc8312bis/issues/69))
 
 ## Since draft-ietf-tcpm-rfc8312bis-01
 
