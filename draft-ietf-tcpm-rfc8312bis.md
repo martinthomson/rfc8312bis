@@ -9,7 +9,6 @@ ipr: trust200902
 area: Transport
 workgroup: TCPM
 obsoletes: 8312
-
 stand_alone: yes
 pi: [toc, sortrefs, symrefs, docmapping]
 
@@ -376,6 +375,10 @@ during the different stages of the CUBIC congestion controller.
 
 The unit of all window sizes in this document is segments of the
 maximum segment size (MSS), and the unit of all times is seconds.
+Implementations can use bytes to express window sizes, which would
+require factoring in the maximum segment size wherever necessary
+and replacing *segments_acked* with the number of bytes
+acknowledged in {{eq4}}.
 
 ### Constants of Interest
 
@@ -446,7 +449,10 @@ An estimate for the congestion window in segments in the AIMD-friendly
 region, that is, an estimate for the congestion window of AIMD TCP.
 
 *segments_acked*:
-Number of segments acked when an ACK is received.
+Number of MSS-sized segments acked when an ACK is received. This
+number will be a decimal value when an ACK acknowledges an amount of data
+that is not MSS-sized. Specifically, it can be less than 1 when
+an ACK acknowledges a segment smaller than the MSS.
 
 ## Window Increase Function {#win-inc}
 
@@ -1004,16 +1010,19 @@ Richard Scheffenegger and Alexander Zimmermann originally co-authored
 ## Since draft-ietf-tcpm-rfc8312bis-02
 
 - add applicability to QUIC and SCTP
-  ([61](https://github.com/NTAP/rfc8312bis/issues/61))
+  ([#61](https://github.com/NTAP/rfc8312bis/issues/61))
 
 - clarity on setting <!--{{{α}{}}}-->alpha*<sub>aimd</sub>* to 1
-  ([68](https://github.com/NTAP/rfc8312bis/issues/68))
+  ([#68](https://github.com/NTAP/rfc8312bis/issues/68))
 
 - introduce <!--{{{α}{}}}-->alpha*<sub>cubic</sub>*
-  ([64](https://github.com/NTAP/rfc8312bis/issues/64))
+  ([#64](https://github.com/NTAP/rfc8312bis/issues/64))
 
 - clarify *cwnd* growth in convex region
-  ([69](https://github.com/NTAP/rfc8312bis/issues/69))
+  ([#69](https://github.com/NTAP/rfc8312bis/issues/69))
+
+- add guidance for using bytes and mention that segments count is decimal
+  ([#67](https://github.com/NTAP/rfc8312bis/issues/67))
 
 ## Since draft-ietf-tcpm-rfc8312bis-01
 
