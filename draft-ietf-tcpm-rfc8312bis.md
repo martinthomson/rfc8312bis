@@ -86,7 +86,7 @@ informative:
     author:
     - ins: S. Gorinsky
     - ins: H. Vin
-    target: "http://www.cs.utexas.edu/ftp/techreports/tr02-39.ps.gz"
+    target: "https://www.cs.utexas.edu/ftp/techreports/tr02-39.ps.gz"
 
   HKLRX06:
     title:
@@ -188,13 +188,13 @@ in the Linux, Windows, and Apple stacks, and has been used and
 deployed globally. Extensive, decade-long deployment experience in
 vastly different Internet scenarios has convincingly demonstrated that
 CUBIC is safe for deployment on the global Internet and delivers
-substantial benefits over traditional AIMD congestion control. It is
+substantial benefits over classical AIMD congestion control. It is
 therefore to be regarded as the current standard for TCP congestion
 control. CUBIC can also be used for other transport protocols such as
 QUIC {{?RFC9000}} and SCTP {{?RFC4960}} as a default congestion controller.
 
 The design of CUBIC was motivated by the well-documented problem
-traditional TCP has with  low utilization over fast and long-distance
+classical TCP has with  low utilization over fast and long-distance
 networks {{K03}}{{?RFC3649}}. This problem arises from a slow increase
 of the congestion window following a congestion event in a network
 with a large bandwidth-delay product (BDP). {{HKLRX06}} indicates that
@@ -209,7 +209,7 @@ they use the Additive Increase and Multiplicative Decrease algorithm
 (AIMD).
 
 CUBIC, originally proposed in {{HRX08}}, is a modification to the
-congestion control algorithm of traditional AIMD TCP to remedy this
+congestion control algorithm of classical AIMD TCP to remedy this
 problem. This document describes the most recent specification of
 CUBIC. Specifically, CUBIC uses a cubic function instead of the linear
 window increase function of AIMD TCP to improve scalability and
@@ -266,17 +266,17 @@ algorithms to AIMD TCP increase the congestion window using convex
 functions, CUBIC uses both the concave and convex profiles of a cubic
 function for window growth.
 
-After a window reduction in response to a congestion event detected
-by duplicate ACKs, Explicit Congestion Notification-Echo (ECN-Echo,
-ECE) ACKs {{!RFC3168}}, TCP RACK {{!RFC8985}} or QUIC loss detection,
-CUBIC remembers the congestion window size at which it received the congestion
-event and performs a multiplicative decrease of the congestion window.
-When CUBIC enters into congestion avoidance, it starts to increase the
-congestion window using the concave profile of the cubic function.
-The cubic function is set to have its plateau at the remembered
-congestion window size, so that the concave window increase continues
-until then. After that, the cubic function turns into a convex profile
-and the convex window increase begins.
+After a window reduction in response to a congestion event detected by
+duplicate ACKs, Explicit Congestion Notification-Echo (ECN-Echo, ECE)
+ACKs {{!RFC3168}}, TCP RACK {{!RFC8985}} or QUIC loss detection {
+{!RFC9002}}, CUBIC remembers the congestion window size at which it
+received the congestion event and performs a multiplicative decrease of
+the congestion window. When CUBIC enters into congestion avoidance, it
+starts to increase the congestion window using the concave profile of
+the cubic function. The cubic function is set to have its plateau at
+the remembered congestion window size, so that the concave window
+increase continues until then. After that, the cubic function turns
+into a convex profile and the convex window increase begins.
 
 This style of window adjustment (concave and then convex) improves the
 algorithm stability while maintaining high network utilization
@@ -578,7 +578,7 @@ in the AIMD-friendly region and *cwnd* SHOULD be set to
 *W<sub>est</sub>* is set equal to *cwnd<sub>start</sub>* at the start
 of the congestion avoidance stage. After that, on every ACK,
 *W<sub>est</sub>* is updated using {{eq4}}. Note that this equation
-is for a connection where Appropriate Byte Counting (ABC) {{!RFC3465}}
+is for a connection where Appropriate Byte Counting (ABC) {{?RFC3465}}
 is disabled. For a connection with ABC enabled, this equation SHOULD be
 adjusted by using the number of acknowledged bytes instead of acknowledged
 segments. Also note that this equation works for connections with
@@ -755,7 +755,7 @@ prior\_W\_{est} = W_{est} \\
 CUBIC MAY implement an algorithm to detect spurious retransmissions,
 such as DSACK {{?RFC3708}}, Forward RTO-Recovery {{?RFC5682}} or Eifel
 {{?RFC3522}}. Once a spurious congestion event is detected, CUBIC
-SHOULD restore the original values of above mentioned variables as
+SHOULD restore the original values of above-mentioned variables as
 follows if the current *cwnd* is lower than *prior_cwnd*. Restoring
 the original values ensures that CUBIC's performance is similar to
 what it would be without spurious losses.
