@@ -1018,6 +1018,10 @@ Richard Scheffenegger and Alexander Zimmermann originally co-authored
 <!-- For future PRs, please include a bullet below that summarizes the change
      and link the issue number to the GitHub issue page. -->
 
+## Since draft-ietf-tcpm-rfc8312bis-03
+- Remove reference from abstract
+  ([#82](https://github.com/NTAP/rfc8312bis/pull/82))
+
 ## Since draft-ietf-tcpm-rfc8312bis-02
 
 - Decription of packet loss rate *p*
