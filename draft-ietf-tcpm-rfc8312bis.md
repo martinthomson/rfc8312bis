@@ -1019,6 +1019,7 @@ Richard Scheffenegger and Alexander Zimmermann originally co-authored
      and link the issue number to the GitHub issue page. -->
 
 ## Since draft-ietf-tcpm-rfc8312bis-03
+
 - Remove reference from abstract
   ([#82](https://github.com/NTAP/rfc8312bis/pull/82))
 
