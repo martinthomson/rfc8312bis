@@ -19,7 +19,10 @@ on:
 jobs:
   lint-changelog:
     name: Lint Markdown
-    uses: avto-dev/markdown-lint@v1.5.0
-    with:
-      config: '.github/workflows/markdownlint.json'
-      args: 'draft-*.md'
+    runs-on: ubuntu-latest
+    steps:
+    - name: Run markdownlint
+      uses: avto-dev/markdown-lint@v1.5.0
+      with:
+        config: '.github/workflows/markdownlint.json'
+        args: 'draft-*.md'
