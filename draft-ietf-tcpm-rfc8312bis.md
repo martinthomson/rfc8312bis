@@ -502,7 +502,7 @@ of the current congestion avoidance stage. For example, right after a
 congestion event, *cwnd<sub>start</sub>* is equal to the new cwnd
 calculated as described in {{mult-dec}}.
 
-Upon receiving an ACK during congestion avoidance, CUBIC computes the
+Upon receiving a new ACK during congestion avoidance, CUBIC computes the
 *target* congestion window size after the next *RTT* using {{eq1}} as
 follows, where *RTT* is the smoothed round-trip time. The lower and
 upper bounds below ensure that CUBIC's congestion window increase rate
@@ -574,7 +574,7 @@ size *W<sub>est</sub>* in the AIMD-friendly region with
 {: artwork-align="center" }
 
 which achieves the same average window size as AIMD TCP. When
-receiving an ACK in congestion avoidance (where *cwnd* could be
+receiving a new ACK in congestion avoidance (where *cwnd* could be
 greater than or less than *W<sub>max</sub>*), CUBIC checks whether
 W<sub>cubic</sub>(*t*) is less than *W<sub>est</sub>*. If so, CUBIC is
 in the AIMD-friendly region and *cwnd* SHOULD be set to
@@ -605,7 +605,7 @@ TCP, which uses AIMD(1, 0.5).
 
 ## Concave Region
 
-When receiving an ACK in congestion avoidance, if CUBIC is not in the
+When receiving a new ACK in congestion avoidance, if CUBIC is not in the
 AIMD-friendly region and *cwnd* is less than *W<sub>max</sub>*, then
 CUBIC is in the concave region. In this region, *cwnd* MUST be
 incremented by
@@ -620,7 +620,7 @@ for each received ACK, where *target* is calculated as described in
 
 ## Convex Region
 
-When receiving an ACK in congestion avoidance, if CUBIC is not in the
+When receiving a new ACK in congestion avoidance, if CUBIC is not in the
 AIMD-friendly region and *cwnd* is larger than or equal to
 *W<sub>max</sub>*, then CUBIC is in the convex region.
 
