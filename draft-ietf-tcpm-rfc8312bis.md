@@ -1029,6 +1029,8 @@ Richard Scheffenegger and Alexander Zimmermann originally co-authored
 
 - Fix incorrect math
   ([#106](https://github.com/NTAP/rfc8312bis/issues/106))
+- Update RFC5681
+  ([#99](https://github.com/NTAP/rfc8312bis/issues/99))
 
 ## Since draft-ietf-tcpm-rfc8312bis-03
 
