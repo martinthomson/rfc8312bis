@@ -529,6 +529,11 @@ cwnd                          &
 ~~~
 {: artwork-align="center" }
 
+
+The elapsed time *t* in {{eq1}} MUST NOT include long periods during
+which *cwnd* has not been updated due to an application limit (see
+{{app-limited}}).
+
 Depending on the value of the current congestion window size *cwnd*,
 CUBIC runs in three different regions:
 
@@ -982,14 +987,14 @@ independently of the level of statistical multiplexing on the link.
 
 This is not considered in the current CUBIC design.
 
-## Behavior for Application-Limited Flows
+## Behavior for Application-Limited Flows {#app-limited}
 
 CUBIC does not increase its congestion window size if a flow is
 currently limited by the application instead of the congestion window.
-In case of long periods during which *cwnd* has not been updated due
-to such an application limit, such as idle periods, *t* in {{eq1}}
-MUST NOT include these periods; otherwise, W<sub>cubic</sub>(*t*)
-might be very high after restarting from these periods.
+{{#win-inc}} requires that *t* in {{eq1}} does not include long
+application-limited periods, such as idle periods, otherwise
+W<sub>cubic</sub>(*t*) might be very high after restarting from these
+periods.
 
 ## Responses to Sudden or Transient Events
 
