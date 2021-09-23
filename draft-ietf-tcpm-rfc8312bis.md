@@ -529,7 +529,6 @@ cwnd                          &
 ~~~
 {: artwork-align="center" }
 
-
 The elapsed time *t* in {{eq1}} MUST NOT include long periods during
 which *cwnd* has not been updated due to an application limit (see
 {{app-limited}}).
