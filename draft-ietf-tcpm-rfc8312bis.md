@@ -990,7 +990,7 @@ This is not considered in the current CUBIC design.
 
 CUBIC does not increase its congestion window size if a flow is
 currently limited by the application instead of the congestion window.
-{{win-inc}} requires that *t* in {{eq1}} does not include long
+{{win-inc}} requires that *t* in {{eq1}} does not include
 application-limited periods, such as idle periods, otherwise
 W<sub>cubic</sub>(*t*) might be very high after restarting from these
 periods.
