@@ -394,7 +394,7 @@ acknowledged in {{eq4}}.
 ### Constants of Interest
 
 {{{β}{}}}*<sub>cubic</sub>*:
-CUBIC multiplication decrease factor as described in {{mult-dec}}.
+CUBIC multiplicative decrease factor as described in {{mult-dec}}.
 
 {{{α}{}}}*<sub>cubic</sub>*:
 CUBIC additive increase factor used in Reno-friendly region
@@ -662,10 +662,14 @@ When a congestion event is detected by mechanisms described in
 and *ssthresh* immediately as described below. An implementation MAY
 set a smaller *ssthresh* than suggested below to
 accommodate rate-limited applications as described in {{?RFC7661}}.
-For both packet loss and congestion detection through ECN, the sender
-MAY employ a Fast Recovery algorithm to gradually adjust the
-congestion window to its new reduced *ssthresh* value. The parameter
-{{{β}{}}}*<sub>cubic</sub>* SHOULD be set to 0.7.
+In case of packet loss, the sender MUST reduce *cwnd*
+and *ssthresh* immediately upon entering loss recovery, similar to
+{{!RFC5681}} (and {{!RFC6675}}). Note that other mechanisms,
+such as Proportional Rate Reduction {{?RFC6937}}, can be used
+to reduce the sending rate during loss recovery more gradually.
+The parameter {{{β}{}}}*<sub>cubic</sub>* SHOULD be set to 0.7, which
+is different from the multiplicative decrease factor used in {{!RFC5681}}
+(and {{!RFC6675}}) during fast recovery.
 
 ~~~ math
 \begin{array}{ll}
@@ -1073,6 +1077,8 @@ These individuals suggested improvements to this document:
   ([#108](https://github.com/NTAP/rfc8312bis/issues/108))
 - Moved MUST NOT from app-limited section to main cubic AI section
   ([#97](https://github.com/NTAP/rfc8312bis/issues/97))
+- Clarify cwnd decrease during multiplicative decrease
+  ([#102](https://github.com/NTAP/rfc8312bis/issues/102))
 
 ## Since draft-ietf-tcpm-rfc8312bis-03
 
