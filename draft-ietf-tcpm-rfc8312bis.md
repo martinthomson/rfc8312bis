@@ -771,12 +771,12 @@ prior\_W\_{est} = W_{est} \\
 {: artwork-align="center" }
 
 CUBIC MAY implement an algorithm to detect spurious retransmissions,
-such as DSACK {{?RFC3708}}, Forward RTO-Recovery {{?RFC5682}} or Eifel
-{{?RFC3522}}. Once a spurious congestion event is detected, CUBIC
-SHOULD restore the original values of above-mentioned variables as
-follows if the current *cwnd* is lower than *prior_cwnd*. Restoring
-the original values ensures that CUBIC's performance is similar to
-what it would be without spurious losses.
+such as Forward RTO-Recovery {{!RFC5682}}. Experimental alternatives
+include DSACK {{?RFC3708}} and Eifel {{?RFC3522}}. Once a spurious
+congestion event is detected, CUBIC SHOULD restore the original values
+of above-mentioned variables as follows if the current *cwnd* is lower
+than *prior_cwnd*. Restoring the original values ensures that CUBIC's
+performance is similar to what it would be without spurious losses.
 
 ~~~ math
 \left.
@@ -801,19 +801,22 @@ these variables.
 ## Slow Start
 
 CUBIC MUST employ a slow-start algorithm, when *cwnd* is no more than
-*ssthresh*. Among the slow-start algorithms, CUBIC MAY choose the Reno
-TCP slow start {{!RFC5681}} in general networks, or the limited slow
-start {{?RFC3742}} or hybrid slow start {{HR08}} for fast and
-long-distance networks.
+*ssthresh*. In general, CUBIC SHOULD use the HyStart++ slow start
+algorithm {{!I-D.ietf-tcpm-hystartplusplus}}, or MAY use the Reno TCP
+slow start algorithm {{!RFC5681}} in the rare cases when
+HyStart++ is not suitable. Experimental alternatives include
+hybrid slow start {{HR08}}, a predecessor to HyStart++ that some CUBIC
+implementations have used as the default for the last decade, and
+limited slow start {{?RFC3742}}.
 
-When CUBIC uses hybrid slow start {{HR08}}, it may exit the first slow
-start without incurring any packet loss and thus *W<sub>max</sub>* is
-undefined. In this special case, CUBIC switches to congestion
-avoidance and increases its congestion window size using {{eq1}},
-where *t* is the elapsed time since the beginning of the current
-congestion avoidance, *K* is set to 0, and *W<sub>max</sub>* is set to
-the congestion window size at the beginning of the current congestion
-avoidance stage.
+When CUBIC uses HyStart++ {{!I-D.ietf-tcpm-hystartplusplus}}, it may
+exit the first slow start without incurring any packet loss and
+thus *W<sub>max</sub>* is undefined. In this special case, CUBIC
+switches to congestion avoidance and increases its congestion window
+size using {{eq1}}, where *t* is the elapsed time since the beginning
+of the current congestion avoidance, *K* is set to 0,
+and *W<sub>max</sub>* is set to the congestion window size at the
+beginning of the current congestion avoidance stage.
 
 # Discussion {#discussion}
 
@@ -1067,6 +1070,10 @@ These individuals suggested improvements to this document:
   ([#106](https://github.com/NTAP/rfc8312bis/issues/106))
 - Update RFC5681
   ([#99](https://github.com/NTAP/rfc8312bis/issues/99))
+- Rephrase text around algorithmic alternatives, add HyStart++
+  ([#85](https://github.com/NTAP/rfc8312bis/issues/85),
+  [#86](https://github.com/NTAP/rfc8312bis/issues/86),
+  [#90](https://github.com/NTAP/rfc8312bis/issues/90))
 - Clarify what we mean by "new ACK" and use it in the text in more places.
   ([#101](https://github.com/NTAP/rfc8312bis/issues/101))
 - Rewrite the Responses to Sudden or Transient Events section
