@@ -672,13 +672,29 @@ is different from the multiplicative decrease factor used in {{!RFC5681}}
 (and {{!RFC6675}}) during fast recovery.
 
 ~~~ math
-\begin{array}{ll}
-ssthresh = cwnd * β_{cubic} &
-\text{// new slow-start threshold} \\
-ssthresh = \mathrm{max}(ssthresh, 2) &
-\text{// threshold is at least 2 MSS} \\
-cwnd = ssthresh &
-\text{// window reduction} \\
+\begin{array}{lll}
+
+ssthresh = &
+cwnd * β_{cubic} &
+\text{new slow-start threshold} \\
+
+cwnd = &
+\left\{
+\begin{array}{l}
+\mathrm{max}(ssthresh, 2) \\
+\mathrm{max}(ssthresh, 1) \\
+\end{array}
+\right. &
+\begin{array}{l}
+\text{reduction on packet loss}, cwnd \text{ is at least 2 MSS} \\
+\text{reduction on ECE}, cwnd \text{ is at least 1 MSS} \\
+\end{array}
+\\
+
+ssthresh = &
+\mathrm{max}(ssthresh, 2) &
+ ssthresh \text{ is at least 2 MSS} \\
+
 \end{array}
 ~~~
 {: artwork-align="center" }
@@ -687,6 +703,12 @@ A side effect of setting {{{β}{}}}*<sub>cubic</sub>* to a value bigger
 than 0.5 is slower convergence. We believe that while a more adaptive
 setting of {{{β}{}}}*<sub>cubic</sub>* could result in faster
 convergence, it will make the analysis of CUBIC much harder.
+
+Note that CUBIC will continue to reduce *cwnd* in response to congestion
+events due to ECN-Echo ACKs until it reaches a value of 1 MSS.
+If congestion persists, a sender with a *cwnd* of 1 MSS needs to reduce
+its sending rate even further. It can achieve that by using a retransmission
+timer with exponential backoff, as described in {{!RFC3168}}.
 
 ## Fast Convergence
 
@@ -978,6 +1000,12 @@ behaves like Reno, since CUBIC modifies only the window adjustment
 algorithm of Reno. Thus, it does not modify the ACK clocking and
 timeout behaviors of Reno.
 
+CUBIC also satisfies the "full backoff" requirement as described in
+{{!RFC5033}}. After reducing the sending rate to one packet per
+RTT in response to congestion events due to ECN-Echo ACKs, CUBIC
+then exponentially increases the transmission
+timer for each packet retransmission while congestion persists.
+
 ## Fairness within the Alternative Congestion Control Algorithm
 
 CUBIC ensures convergence of competing CUBIC flows with the same RTT
@@ -1086,6 +1114,8 @@ These individuals suggested improvements to this document:
   ([#97](https://github.com/NTAP/rfc8312bis/issues/97))
 - Clarify cwnd decrease during multiplicative decrease
   ([#102](https://github.com/NTAP/rfc8312bis/issues/102))
+- Set lower bound of cwnd to 1 MSS and use retransmit timer thereafter
+  ([#83](https://github.com/NTAP/rfc8312bis/issues/83))
 
 ## Since draft-ietf-tcpm-rfc8312bis-03
 
