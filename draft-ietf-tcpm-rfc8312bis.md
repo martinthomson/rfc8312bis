@@ -660,9 +660,7 @@ for each received new ACK, where *target* is calculated as described in
 
 When a congestion event is detected by mechanisms described in
 {{cubic-inc}}, CUBIC updates *W<sub>max</sub>* and reduces *cwnd*
-and *ssthresh* immediately as described below. An implementation MAY
-set a smaller *ssthresh* than suggested below to
-accommodate rate-limited applications as described in {{?RFC7661}}.
+and *ssthresh* immediately as described below.
 In case of packet loss, the sender MUST reduce *cwnd*
 and *ssthresh* immediately upon entering loss recovery, similar to
 {{!RFC5681}} (and {{!RFC6675}}). Note that other mechanisms,
@@ -672,12 +670,25 @@ The parameter {{{β}{}}}*<sub>cubic</sub>* SHOULD be set to 0.7, which
 is different from the multiplicative decrease factor used in {{!RFC5681}}
 (and {{!RFC6675}}) during fast recovery.
 
+In {{eqssthresh}}, *flight_size* is the amount of outstanding data in
+the network, as defined in {{!RFC5681}}.
+Note that a rate-limited application with idle periods
+or periods when unable to send at the full rate permitted by *cwnd*
+may easily encounter notable variations in the volume of data sent
+from one RTT to another, resulting in *flight_size* that is significantly
+less than *cwnd* on a congestion event. This may decrease *cwnd* to a
+much lower value than necessary. To avoid suboptimal performance with
+such applications, some implementations of CUBIC use *cwnd* instead of
+*flight_size* to calculate the new *ssthresh* in {{eqssthresh}}.
+Alternatively, the mechanisms described in {{?RFC7661}} may also
+be adopted to mitigate this issue.
+
 ~~~ math
 \begin{array}{lll}
 
 ssthresh = &
-cwnd * β_{cubic} &
-\text{new slow-start threshold} \\
+flight\_size * β_{cubic} &
+\text{// new } ssthresh \\
 
 cwnd = &
 \left\{
@@ -687,18 +698,18 @@ cwnd = &
 \end{array}
 \right. &
 \begin{array}{l}
-\text{reduction on packet loss}, cwnd \text{ is at least 2 MSS} \\
-\text{reduction on ECE}, cwnd \text{ is at least 1 MSS} \\
+\text{// reduction on packet loss}, cwnd \text{ is at least 2 MSS} \\
+\text{// reduction on ECE}, cwnd \text{ is at least 1 MSS} \\
 \end{array}
 \\
 
 ssthresh = &
 \mathrm{max}(ssthresh, 2) &
- ssthresh \text{ is at least 2 MSS} \\
+\text{// } ssthresh \text{ is at least 2 MSS} \\
 
 \end{array}
 ~~~
-{: artwork-align="center" }
+{: #eqssthresh artwork-align="center" }
 
 A side effect of setting {{{β}{}}}*<sub>cubic</sub>* to a value bigger
 than 0.5 is slower convergence. We believe that while a more adaptive
@@ -1129,6 +1140,8 @@ These individuals suggested improvements to this document:
   ([#94](https://github.com/NTAP/rfc8312bis/issues/94))
 - Set lower bound of cwnd to 1 MSS and use retransmit timer thereafter
   ([#83](https://github.com/NTAP/rfc8312bis/issues/83))
+- Use FlightSize instead of cwnd to update ssthresh
+  ([#114](https://github.com/NTAP/rfc8312bis/issues/114))
 
 ## Since draft-ietf-tcpm-rfc8312bis-03
 
