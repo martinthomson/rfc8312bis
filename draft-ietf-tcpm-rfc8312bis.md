@@ -244,7 +244,7 @@ guidelines specified in {{!RFC5033}}.
 
 # Conventions
 
-{::boilerplate bcp14}
+{::boilerplate bcp14-tagged}
 
 # Design Principles of CUBIC
 
