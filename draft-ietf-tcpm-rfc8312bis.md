@@ -12,6 +12,10 @@ obsoletes: 8312
 updates: 5681
 stand_alone: yes
 pi: [toc, sortrefs, symrefs, docmapping]
+venue:
+ group: TCPM
+ mail: tcpm@ietf.org
+ github: NTAP/rfc8312bis
 
 author:
 
@@ -144,16 +148,6 @@ academic work. Based on the extensive deployment experience with
 CUBIC, it also moves the specification to the Standards Track,
 obsoleting RFC 8312.  This also requires updating RFC 5681, to allow
 for CUBIC's occasionally more aggressive sending behavior.
-
---- note_Note_to_Readers
-
-Discussion of this draft takes place on the [TCPM working group
-mailing list](mailto:tcpm@ietf.org), which is archived at
-[](https://mailarchive.ietf.org/arch/browse/tcpm/).
-
-Working Group information can be found at
-[](https://datatracker.ietf.org/wg/tcpm/); source code and issues list
-for this draft can be found at [](https://github.com/NTAP/rfc8312bis).
 
 --- note_Note_to_the_RFC_Editor
 
