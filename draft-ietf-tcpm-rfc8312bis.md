@@ -1095,12 +1095,14 @@ These individuals suggested improvements to this document:
 - Junho Choi
 - Markku Kojo
 - Martin Thomson
+- Matt Mathis
 - Matt Olson
 - Michael Welzl
 - Mirja Kühlewind
 - Mohit P. Tahiliani
 - Neal Cardwell
 - Praveen Balasubramanian
+- Randall Stewart
 - Richard Scheffenegger
 - Rod Grimes
 - Tom Henderson
