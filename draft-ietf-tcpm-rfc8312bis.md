@@ -1,10 +1,11 @@
 ---
 
 title: CUBIC for Fast and Long-Distance Networks
-abbrev: CUBIC
+abbrev: TCP CUBIC
 docname: draft-ietf-tcpm-rfc8312bis-latest
 date: {DATE}
 category: std
+submissionType: IETF
 ipr: trust200902
 area: Transport
 workgroup: TCPM
