@@ -7,12 +7,12 @@ Internet-Draft                                                       UNL
 Obsoletes: 8312 (if approved)                                      S. Ha
 Updates: 5681 (if approved)                                     Colorado
 Intended status: Standards Track                                 I. Rhee
-Expires: 25 November 2022                                         Bowery
+Expires: 26 November 2022                                         Bowery
                                                                  V. Goel
                                                               Apple Inc.
                                                           L. Eggert, Ed.
                                                                   NetApp
-                                                             24 May 2022
+                                                             25 May 2022
 
 
                CUBIC for Fast and Long-Distance Networks
@@ -76,7 +76,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 25 November 2022.
+   This Internet-Draft will expire on 26 November 2022.
 
 Copyright Notice
 
@@ -219,11 +219,11 @@ Table of Contents
    outlined in [RFC2914], so the process in [RFC5033] may not apply.
 
    Also, the wide deployment of CUBIC on the Internet was driven by
-   direct adoption in most popular operating systems, and did not follow
-   the practices documented in [RFC5033].  However, due to the resulting
-   extremely widespread deployment experience over a long period of
-   time, the IETF has determined that CUBIC may be published as a
-   standards-track specification.
+   direct adoption in most of the popular operating systems, and did not
+   follow the practices documented in [RFC5033].  However, due to the
+   resulting extremely widespread deployment experience over a long
+   period of time, the IETF has determined that CUBIC may be published
+   as a standards-track specification.
 
    In the following sections, we first briefly explain the design
    principles of CUBIC, then provide the exact specification of CUBIC,
