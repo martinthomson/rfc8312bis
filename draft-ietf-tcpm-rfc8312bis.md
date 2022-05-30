@@ -196,6 +196,29 @@ designed to be less aggressive and fairer to Reno in bandwidth
 usage than BIC-TCP while maintaining the strengths of BIC-TCP such as
 stability, window scalability, and round-trip time (RTT) fairness.
 
+{{!RFC5033}} documents the IETF's best current practices for
+specifying new congestion control algorithms, specifically, ones that
+differ from the general congestion control principles outlined in
+{{!RFC2914}}. It describes what type of evaluation is expected by the
+IETF to understand the suitability of a new congestion control
+algorithm and the process to enable a specification to be approved
+for widespread deployment in the global Internet.
+
+There are areas in which CUBIC differs from the congestion control
+algorithms previously published in standards-track RFCs; those
+changes are specified in this document. However, it is not obvious
+that these changes go beyond the general congestion control
+principles outlined in {{!RFC2914}}, so the process in
+{{!RFC5033}} may not apply.
+
+Also, the wide deployment of CUBIC on the Internet was driven by
+direct adoption in most of the popular operating systems, and did not
+follow the practices documented in {{!RFC5033}}. However, due to the
+resulting Internet-scale deployment experience over a long
+period of time, the IETF has determined that CUBIC may be published
+as a standards-track specification. This decision by the IETF does
+not alter the general guidance in {{!RFC2914}}.
+
 In the following sections, we first briefly explain the design
 principles of CUBIC, then provide the exact specification of CUBIC,
 and finally discuss the safety features of CUBIC following the
@@ -1122,6 +1145,11 @@ These individuals suggested improvements to this document:
 
 <!-- For future PRs, please include a bullet below that summarizes the change
      and link the issue number to the GitHub issue page. -->
+
+## Since draft-ietf-tcpm-rfc8312bis-07
+
+- Document the WG discussion and decision around {{!RFC5033}} and
+  {{!RFC2914}} ([#145](https://github.com/NTAP/rfc8312bis/pull/145))
 
 ## Since draft-ietf-tcpm-rfc8312bis-06
 
