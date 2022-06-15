@@ -7,12 +7,12 @@ Internet-Draft                                                       UNL
 Obsoletes: 8312 (if approved)                                      S. Ha
 Updates: 5681 (if approved)                                     Colorado
 Intended status: Standards Track                                 I. Rhee
-Expires: 1 December 2022                                          Bowery
+Expires: 17 December 2022                                         Bowery
                                                                  V. Goel
                                                               Apple Inc.
                                                           L. Eggert, Ed.
                                                                   NetApp
-                                                             30 May 2022
+                                                            15 June 2022
 
 
                CUBIC for Fast and Long-Distance Networks
@@ -76,7 +76,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 1 December 2022.
+   This Internet-Draft will expire on 17 December 2022.
 
 Copyright Notice
 
@@ -135,20 +135,21 @@ Table of Contents
      8.2.  Informative References
    Appendix A.  Acknowledgments
    Appendix B.  Evolution of CUBIC
-     B.1.  Since draft-ietf-tcpm-rfc8312bis-07
-     B.2.  Since draft-ietf-tcpm-rfc8312bis-06
-     B.3.  Since draft-ietf-tcpm-rfc8312bis-05
-     B.4.  Since draft-ietf-tcpm-rfc8312bis-04
-     B.5.  Since draft-ietf-tcpm-rfc8312bis-03
-     B.6.  Since draft-ietf-tcpm-rfc8312bis-02
-     B.7.  Since draft-ietf-tcpm-rfc8312bis-01
-     B.8.  Since draft-ietf-tcpm-rfc8312bis-00
-     B.9.  Since draft-eggert-tcpm-rfc8312bis-03
-     B.10. Since draft-eggert-tcpm-rfc8312bis-02
-     B.11. Since draft-eggert-tcpm-rfc8312bis-01
-     B.12. Since draft-eggert-tcpm-rfc8312bis-00
-     B.13. Since RFC8312
-     B.14. Since the Original Paper
+     B.1.  Since draft-ietf-tcpm-rfc8312bis-08
+     B.2.  Since draft-ietf-tcpm-rfc8312bis-07
+     B.3.  Since draft-ietf-tcpm-rfc8312bis-06
+     B.4.  Since draft-ietf-tcpm-rfc8312bis-05
+     B.5.  Since draft-ietf-tcpm-rfc8312bis-04
+     B.6.  Since draft-ietf-tcpm-rfc8312bis-03
+     B.7.  Since draft-ietf-tcpm-rfc8312bis-02
+     B.8.  Since draft-ietf-tcpm-rfc8312bis-01
+     B.9.  Since draft-ietf-tcpm-rfc8312bis-00
+     B.10. Since draft-eggert-tcpm-rfc8312bis-03
+     B.11. Since draft-eggert-tcpm-rfc8312bis-02
+     B.12. Since draft-eggert-tcpm-rfc8312bis-01
+     B.13. Since draft-eggert-tcpm-rfc8312bis-00
+     B.14. Since RFC8312
+     B.15. Since the Original Paper
    Authors' Addresses
 
 1.  Introduction
@@ -411,6 +412,10 @@ Table of Contents
 
    _ssthresh_: Current slow start threshold in segments.
 
+   _prior_cwnd_: Size of _cwnd_ in segments at the time of setting
+   _ssthresh_ most recently, either upon exiting the first slow start,
+   or just before _cwnd_ was reduced in the last congestion event.
+
    _W_max_: Size of _cwnd_ in segments just before _cwnd_ was reduced in
    the last congestion event when fast convergence is disabled.
    However, if fast convergence is enabled, the size may be further
@@ -588,11 +593,11 @@ Table of Contents
 
                                   Figure 4
 
-   Note that once _W_est_ reaches _W_max_, that is, _W_est_ >= _W_max_,
-   CUBIC needs to start probing to determine the new value of _W_max_.
-   At this point, α__cubic_ SHOULD be set to 1 to ensure that CUBIC can
-   achieve the same congestion window increment as Reno, which uses
-   AIMD(1, 0.5).
+   Once _W_est_ has grown to reach the _cwnd_ at the time of most
+   recently setting _ssthresh_, that is, _W_est_ >= _prior_cwnd_, the
+   sender SHOULD set α__cubic_ to 1 to ensure that it can achieve the
+   same congestion window increment rate as Reno, which uses AIMD(1,
+   0.5).
 
 4.4.  Concave Region
 
@@ -665,19 +670,10 @@ Table of Contents
    window.  Some implementations of CUBIC currently use _cwnd_ instead
    of _flight_size_ when calculating a new _ssthresh_ using Figure 5.
 
-            flight_size * β      // new ssthresh
-ssthresh =                 cubic
+   (Artwork only available as ascii-art: No external link available, see
+   draft-ietf-tcpm-rfc8312bis-latest.html for artwork.)
 
-            /max(ssthresh, 2)    // reduction on packet loss, cwnd is at least 2 MSS
-            |
-cwnd =      <
-            |max(ssthresh, 1)    // reduction on ECE, cwnd is at least 1 MSS
-            \
-
-            max(ssthresh, 2)     // ssthresh is at least 2 MSS
-ssthresh =
-
-                               Figure 5
+                                  Figure 5
 
    A side effect of setting β__cubic_ to a value bigger than 0.5 is
    slower convergence.  We believe that while a more adaptive setting of
@@ -792,20 +788,23 @@ W    = <
    implementation MAY save the current value of the following variables
    before the congestion window is reduced.
 
-                       prior_cwnd = cwnd
+                       undo_cwnd = cwnd
 
-                       prior_ssthresh = ssthresh
+                       undo_prior wnd = prior wnd
+                                 c           c
 
-                       prior_W    = W
-                              max    max
+                       undo_ssthresh = ssthresh
 
-                       prior_K = K
+                       undo_W    = W
+                             max    max
 
-                       prior_epoch      = epoch
-                                  start        start
+                       undo_K = K
 
-                       prior_W_{est} = W
-                                        est
+                       undo_epoch      = epoch
+                                 start        start
+
+                       undo_W_{est} = W
+                                       est
 
    Once the previously declared packet loss is confirmed to be spurious,
    CUBIC MAY restore the original values of the above-mentioned
@@ -813,21 +812,23 @@ W    = <
    _prior_cwnd_. Restoring the original values ensures that CUBIC's
    performance is similar to what it would be without spurious losses.
 
-                                         \
-            cwnd = prior_cwnd            |
+             cwnd = undo_cwnd            \
                                          |
-            ssthresh = prior_ssthresh    |
+             prior wnd = undo_prior_cwnd |
+                  c                      |
                                          |
-            W    = prior_W               |
-             max          max            |
-                                         >if cwnd < prior_cwnd
-            K = prior_K                  |
+             ssthresh = undo_ssthresh    |
                                          |
-            epoch      = prior_epoch     |
-                 start              start|
+             W    = undo_W               |
+              max         max            >if cwnd < prior_cwnd
                                          |
-            W    = prior_W               |
-             est          est            /
+             K = undo_K                  |
+                                         |
+             epoch      = undo_epoch     |
+                  start             start|
+                                         |
+             W    = undo_W               |
+              est         est            /
 
    In rare cases, when the detection happens long after a spurious loss
    event and the current _cwnd_ is already higher than _prior_cwnd_,
@@ -849,12 +850,12 @@ W    = <
 
    When CUBIC uses HyStart++ [I-D.ietf-tcpm-hystartplusplus], it may
    exit the first slow start without incurring any packet loss and thus
-   _W_max_ is undefined.  In this special case, CUBIC switches to
-   congestion avoidance and increases its congestion window size using
-   Figure 1, where _t_ is the elapsed time since the beginning of the
-   current congestion avoidance, _K_ is set to 0, and _W_max_ is set to
-   the congestion window size at the beginning of the current congestion
-   avoidance stage.
+   _W_max_ is undefined.  In this special case, CUBIC sets _prior_cwnd =
+   cwnd_ and switches to congestion avoidance.  It then increases its
+   congestion window size using Figure 1, where _t_ is the elapsed time
+   since the beginning of the current congestion avoidance, _K_ is set
+   to 0, and _W_max_ is set to the congestion window size at the
+   beginning of the current congestion avoidance stage.
 
 5.  Discussion
 
@@ -1403,17 +1404,24 @@ Appendix A.  Acknowledgments
 
 Appendix B.  Evolution of CUBIC
 
-B.1.  Since draft-ietf-tcpm-rfc8312bis-07
+B.1.  Since draft-ietf-tcpm-rfc8312bis-08
+
+   *  Fix the text specifying when alpha_cubic SHOULD be set to 1 to
+      indicate this should happen when cwnd >= prior_cwnd rather than
+      cwnd >= W_max, since these are different in the fast convergence
+      case (#146 (https://github.com/NTAP/rfc8312bis/pull/146))
+
+B.2.  Since draft-ietf-tcpm-rfc8312bis-07
 
    *  Document the WG discussion and decision around [RFC5033] and
       [RFC2914] (#145 (https://github.com/NTAP/rfc8312bis/pull/145))
 
-B.2.  Since draft-ietf-tcpm-rfc8312bis-06
+B.3.  Since draft-ietf-tcpm-rfc8312bis-06
 
    *  RFC7661 is safe even when cwnd grows beyond rwnd (#143
       (https://github.com/NTAP/rfc8312bis/issues/143))
 
-B.3.  Since draft-ietf-tcpm-rfc8312bis-05
+B.4.  Since draft-ietf-tcpm-rfc8312bis-05
 
    *  Clarify meaning of "application-limited" in Section 5.8 (#137
       (https://github.com/NTAP/rfc8312bis/issues/137))
@@ -1430,7 +1438,7 @@ B.3.  Since draft-ietf-tcpm-rfc8312bis-05
    *  Change wording around setting ssthresh (#131
       (https://github.com/NTAP/rfc8312bis/issues/131))
 
-B.4.  Since draft-ietf-tcpm-rfc8312bis-04
+B.5.  Since draft-ietf-tcpm-rfc8312bis-04
 
    *  Fix incorrect math (#106 (https://github.com/NTAP/rfc8312bis/
       issues/106))
@@ -1471,12 +1479,12 @@ B.4.  Since draft-ietf-tcpm-rfc8312bis-04
    *  Use FlightSize instead of cwnd to update ssthresh (#114
       (https://github.com/NTAP/rfc8312bis/issues/114))
 
-B.5.  Since draft-ietf-tcpm-rfc8312bis-03
+B.6.  Since draft-ietf-tcpm-rfc8312bis-03
 
    *  Remove reference from abstract (#82
       (https://github.com/NTAP/rfc8312bis/pull/82))
 
-B.6.  Since draft-ietf-tcpm-rfc8312bis-02
+B.7.  Since draft-ietf-tcpm-rfc8312bis-02
 
    *  Description of packet loss rate _p_ (#65
       (https://github.com/NTAP/rfc8312bis/issues/65))
@@ -1502,18 +1510,18 @@ B.6.  Since draft-ietf-tcpm-rfc8312bis-02
    *  add loss events detected by RACK and QUIC loss detection (#62
       (https://github.com/NTAP/rfc8312bis/issues/62))
 
-B.7.  Since draft-ietf-tcpm-rfc8312bis-01
+B.8.  Since draft-ietf-tcpm-rfc8312bis-01
 
    *  address Michael Scharf's editorial suggestions. (#59
       (https://github.com/NTAP/rfc8312bis/issues/59))
 
    *  add "Note to the RFC Editor" about removing underscores
 
-B.8.  Since draft-ietf-tcpm-rfc8312bis-00
+B.9.  Since draft-ietf-tcpm-rfc8312bis-00
 
    *  use updated xml2rfc with better text rendering of subscripts
 
-B.9.  Since draft-eggert-tcpm-rfc8312bis-03
+B.10.  Since draft-eggert-tcpm-rfc8312bis-03
 
    *  fix spelling nits
 
@@ -1521,7 +1529,7 @@ B.9.  Since draft-eggert-tcpm-rfc8312bis-03
 
    *  define _W_max_ more clearly
 
-B.10.  Since draft-eggert-tcpm-rfc8312bis-02
+B.11.  Since draft-eggert-tcpm-rfc8312bis-02
 
    *  add definition for segments_acked and alpha__aimd_. (#47
       (https://github.com/NTAP/rfc8312bis/issues/47))
@@ -1533,7 +1541,7 @@ B.10.  Since draft-eggert-tcpm-rfc8312bis-02
       multiplicative decrease. (#53 (https://github.com/NTAP/rfc8312bis/
       issues/53))
 
-B.11.  Since draft-eggert-tcpm-rfc8312bis-01
+B.12.  Since draft-eggert-tcpm-rfc8312bis-01
 
    *  rename TCP-Friendly to AIMD-Friendly and rename Standard TCP to
       AIMD TCP to avoid confusion as CUBIC has been widely used on the
@@ -1546,7 +1554,7 @@ B.11.  Since draft-eggert-tcpm-rfc8312bis-01
    *  rephrase introduction to avoid referring to variables that have
       not been defined yet.
 
-B.12.  Since draft-eggert-tcpm-rfc8312bis-00
+B.13.  Since draft-eggert-tcpm-rfc8312bis-00
 
    *  acknowledge former co-authors (#15
       (https://github.com/NTAP/rfc8312bis/issues/15))
@@ -1581,7 +1589,7 @@ B.12.  Since draft-eggert-tcpm-rfc8312bis-00
       _W_(last_max)_ (#28 (https://github.com/NTAP/rfc8312bis/
       issues/28))
 
-B.13.  Since RFC8312
+B.14.  Since RFC8312
 
    *  converted to Markdown and xml2rfc v3
 
@@ -1593,7 +1601,7 @@ B.13.  Since RFC8312
 
    *  move to Standards Track
 
-B.14.  Since the Original Paper
+B.15.  Since the Original Paper
 
    CUBIC has gone through a few changes since the initial release
    [HRX08] of its algorithm and implementation.  Below we highlight the
