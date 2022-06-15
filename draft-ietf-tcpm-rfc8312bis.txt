@@ -790,8 +790,7 @@ W    = <
 
                        undo_cwnd = cwnd
 
-                       undo_prior wnd = prior wnd
-                                 c           c
+                       undo_prior_cwnd = prior_cwnd
 
                        undo_ssthresh = ssthresh
 
@@ -812,10 +811,10 @@ W    = <
    _prior_cwnd_. Restoring the original values ensures that CUBIC's
    performance is similar to what it would be without spurious losses.
 
-             cwnd = undo_cwnd            \
+                                         \
+             cwnd = undo_cwnd            |
                                          |
-             prior wnd = undo_prior_cwnd |
-                  c                      |
+             prior_cwnd = undo_prior_cwnd|
                                          |
              ssthresh = undo_ssthresh    |
                                          |
