@@ -408,6 +408,11 @@ Current congestion window in segments.
 *ssthresh*:
 Current slow start threshold in segments.
 
+*prior_cwnd*:
+Size of *cwnd* in segments at the time of setting *ssthresh*
+most recently, either upon exiting the first slow start, or
+just before *cwnd* was reduced in the last congestion event.
+
 *W<sub>max</sub>*:
 Size of *cwnd* in segments just before *cwnd* was reduced in the last
 congestion event when fast convergence is disabled. However, if fast
@@ -588,11 +593,10 @@ W_{est} = W_{est} + α_{cubic} * \frac{segments\_acked}{cwnd}
 ~~~
 {: #eq4 artwork-align="center" }
 
-Note that once *W<sub>est</sub>* reaches *W<sub>max</sub>*, that is,
-*W<sub>est</sub>* >= *W<sub>max</sub>*, CUBIC needs to start probing to
-determine the new value of *W<sub>max</sub>*. At this point,
-{{{α}{}}}*<sub>cubic</sub>* SHOULD be set to 1 to ensure that
-CUBIC can achieve the same congestion window increment as Reno,
+Once *W<sub>est</sub>* has grown to reach the *cwnd* at the time of
+most recently setting *ssthresh*, that is, *W<sub>est</sub>* >= *prior_cwnd*,
+the sender SHOULD set {{{α}{}}}*<sub>cubic</sub>* to 1 to ensure that
+it can achieve the same congestion window increment rate as Reno,
 which uses AIMD(1, 0.5).
 
 ## Concave Region
@@ -676,6 +680,8 @@ when calculating a new *ssthresh* using {{eqssthresh}}.
 ssthresh = &
 flight\_size * β_{cubic} &
 \text{// new } ssthresh \\
+
+prior\_cwnd = cwnd \\
 
 cwnd = &
 \left\{
@@ -812,12 +818,13 @@ variables before the congestion window is reduced.
 
 ~~~ math
 \begin{array}{l}
-prior\_cwnd = cwnd \\
-prior\_ssthresh = ssthresh \\
-prior\_W_{max} = W_{max} \\
-prior\_K = K \\
-prior\_epoch_{start} = epoch_{start} \\
-prior\_W\_{est} = W_{est} \\
+undo\_cwnd = cwnd \\
+undo\_prior_cwnd = prior_cwnd \\
+undo\_ssthresh = ssthresh \\
+undo\_W_{max} = W_{max} \\
+undo\_K = K \\
+undo\_epoch_{start} = epoch_{start} \\
+undo\_W\_{est} = W_{est} \\
 \end{array}
 ~~~
 {: artwork-align="center" }
@@ -831,12 +838,13 @@ performance is similar to what it would be without spurious losses.
 ~~~ math
 \left.
 \begin{array}{l}
-cwnd = prior\_cwnd \\
-ssthresh = prior\_ssthresh \\
-W_{max} = prior\_W_{max} \\
-K = prior\_K \\
-epoch_{start} = prior\_epoch_{start} \\
-W_{est} = prior\_W_{est} \\
+cwnd = undo\_cwnd \\
+prior_cwnd = undo\_prior\_cwnd \\
+ssthresh = undo\_ssthresh \\
+W_{max} = undo\_W_{max} \\
+K = undo\_K \\
+epoch_{start} = undo\_epoch_{start} \\
+W_{est} = undo\_W_{est} \\
 \end{array}
 \right\}
 \text{if }cwnd < prior\_cwnd
@@ -864,7 +872,8 @@ multiplicative decrease of congestion avoidance work well together.
 When CUBIC uses HyStart++ {{!I-D.ietf-tcpm-hystartplusplus}}, it may
 exit the first slow start without incurring any packet loss and
 thus *W<sub>max</sub>* is undefined. In this special case, CUBIC
-switches to congestion avoidance and increases its congestion window
+sets *prior_cwnd = cwnd* and switches to congestion avoidance.
+It then increases its congestion window
 size using {{eq1}}, where *t* is the elapsed time since the beginning
 of the current congestion avoidance, *K* is set to 0,
 and *W<sub>max</sub>* is set to the congestion window size at the
@@ -1145,6 +1154,14 @@ These individuals suggested improvements to this document:
 
 <!-- For future PRs, please include a bullet below that summarizes the change
      and link the issue number to the GitHub issue page. -->
+
+## Since draft-ietf-tcpm-rfc8312bis-08
+
+- Fix the text specifying when alpha_cubic SHOULD be set to 1 to
+  indicate this should happen when cwnd >= prior_cwnd rather
+  than cwnd >= W_max, since these are different in the
+  fast convergence case
+  ([#146](https://github.com/NTAP/rfc8312bis/pull/146))
 
 ## Since draft-ietf-tcpm-rfc8312bis-07
 
