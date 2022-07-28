@@ -1124,6 +1124,7 @@ Richard Scheffenegger and Alexander Zimmermann originally co-authored
 
 These individuals suggested improvements to this document:
 
+{:compact}
 - Bob Briscoe
 - Christian Huitema
 - Gorry Fairhurst
